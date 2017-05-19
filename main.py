@@ -2,7 +2,7 @@ from grafo import *
 
 def trataAresta(arestas):
     lista_Aresta = []
-    lista_aux1 = arestas.split(',')
+    lista_aux1 = arestas.split(', ')
     arestas_dict = {}
     for i in lista_aux1:
         lista_Aresta.append(i.split('('))
@@ -57,7 +57,7 @@ while parada == False:
             cont = 0
             break
 
-        elif not Grafo.arestaValida(conjuntoDict_Arestas[chave]): #Erro pede outro argumento self
+        elif not Grafo.arestaValida(Grafo,conjuntoDict_Arestas[chave]): #Erro pede outro argumento self
            print('Erro 1: A aresta',conjuntoDict_Arestas[chave],'não é válida. Informe novamente as arestas a partir da aresta', conjuntoDict_Arestas[chave],'!')
            cont = 0
            break
