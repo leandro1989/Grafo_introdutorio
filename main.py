@@ -2,7 +2,7 @@ from grafo import *
 
 def trataAresta(arestas):
     lista_Aresta = []
-    lista_aux1 = arestas.split(', ')
+    lista_aux1 = arestas.split(',')
     arestas_dict = {}
     for i in lista_aux1:
         lista_Aresta.append(i.split('('))
@@ -16,17 +16,17 @@ def trataAresta(arestas):
 cont = 0
 SEPARADOR_ARESTA = '-'
 parada = True
-arestas_validas = {}
 Vertices = []
+grafo_Valido = []
 
 while parada == True:
     vert = input('Informe os vértices separados por vírgulas: ')
 
-    if vert.count('(') != vert.count(')') != 0:
+    if vert.count('(') != 0 or vert.count(')') != 0:
         print('Vértices invalidos. Informe vértices sem parênteses!')
         continue
 
-    Vertices = vert.split(',')
+    Vertices = vert.split(', ')
 
     for vertice in Vertices:
         cont += 1
@@ -48,44 +48,10 @@ while parada == False:
     arestas = input('Informe as arestas separados por vírgulas(Exemplo: a1(b-c),a2(c-d),...): ')
 
     conjuntoDict_Arestas = trataAresta(arestas)
-
-    for chave in conjuntoDict_Arestas.keys():
-        cont += 1
-
-        if conjuntoDict_Arestas[chave].isspace():
-            print('Erro 0: A aresta',conjuntoDict_Arestas[chave],'não é válida. Informe novamente as arestas a partir da aresta', conjuntoDict_Arestas[chave],'!')
-            cont = 0
-            break
-
-        elif not Grafo.arestaValida(Grafo,conjuntoDict_Arestas[chave]): #Erro pede outro argumento self
-           print('Erro 1: A aresta',conjuntoDict_Arestas[chave],'não é válida. Informe novamente as arestas a partir da aresta', conjuntoDict_Arestas[chave],'!')
-           cont = 0
-           break
-
-        elif chave.count(SEPARADOR_ARESTA) != 0:
-            print('Erro 2: A aresta',conjuntoDict_Arestas[chave],'não é válida. Informe novamente as arestas a partir da aresta', conjuntoDict_Arestas[chave],'!')
-            cont = 0
-            break
-
-        elif conjuntoDict_Arestas[chave].count('(') != 0 or conjuntoDict_Arestas[chave].count(')') != 0:
-            print('Erro 3: A aresta',conjuntoDict_Arestas[chave],'não é válida. Informe novamente as arestas a partir da aresta', conjuntoDict_Arestas[chave],'!')
-            cont = 0
-            break
-
-        elif conjuntoDict_Arestas[chave][0] == SEPARADOR_ARESTA:
-            print('Erro 4: A aresta',conjuntoDict_Arestas[chave],'não é válida. Informe novamente as arestas a partir da aresta', conjuntoDict_Arestas[chave],'!')
-            cont = 0
-            break
-
-        elif conjuntoDict_Arestas[chave][-1] == SEPARADOR_ARESTA:
-            print('Erro 5: A aresta',conjuntoDict_Arestas[chave],'não é válida. Informe novamente as arestas a partir da aresta', conjuntoDict_Arestas[chave],'!')
-            cont = 0
-            break
-
-        arestas_validas[chave] = conjuntoDict_Arestas[chave] # Se a aresta salva
-
-    if cont == len(conjuntoDict_Arestas):
-        parada = True
-
-test_grafo = Grafo(Vertices,arestas_validas)
-print(test_grafo)
+    try:
+        grafo_Valido = Grafo(Vertices, conjuntoDict_Arestas)
+        break
+    except:
+        print("Arestas inválidas. Verifique se os vértice informados nas aresta condizem com os vértices informados. Informe as arestas novamente.")
+        continue
+print(grafo_Valido)
