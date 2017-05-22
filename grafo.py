@@ -18,6 +18,7 @@ class Grafo:
         :param N: Uma lista dos vértices (ou nodos) do grafo.
         :param V: Uma dicionário que guarda as arestas do grafo. A chave representa o nome da aresta e o valor é uma string que contém dois vértices separados por um traço.
         '''
+        #f(a-s), a(s-d), g(d-a)
         for v in N:
             if not(Grafo.verticeValido(v)):
                 raise VerticeInvalidoException('O vértice ' + v + ' é inválido')

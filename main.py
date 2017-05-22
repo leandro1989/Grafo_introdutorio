@@ -14,7 +14,6 @@ def trataAresta(arestas):
     return arestas_dict
 
 cont = 0
-SEPARADOR_ARESTA = '-'
 parada = True
 Vertices = []
 grafo_Valido = []
@@ -50,8 +49,20 @@ while parada == False:
     conjuntoDict_Arestas = trataAresta(arestas)
     try:
         grafo_Valido = Grafo(Vertices, conjuntoDict_Arestas)
-        break
     except:
-        print("Arestas inválidas. Verifique se os vértice informados nas aresta condizem com os vértices informados. Informe as arestas novamente.")
+        print("Arestas inválidas: Verifique se os vértice informados estão definidos. Informe as arestas novamente.")
         continue
+
+    chaves = conjuntoDict_Arestas.keys()
+
+    for nome in chaves:
+        cont += 1
+        if nome.isspace() or nome == '':
+            cont = 0
+            print('Nome de aresta inválida. Informe as arestas no formato a1(b-c),a2(c-d),... ')
+            continue
+
+    if cont == len(conjuntoDict_Arestas):
+        parada = True
+
 print(grafo_Valido)
