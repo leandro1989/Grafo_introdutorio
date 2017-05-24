@@ -9,6 +9,10 @@ def valida_Aresta(arestas):
     for j in range(len(lista_Aresta)):
         if lista_Aresta[j][1].count(')') != 0: # Sem esse if da erro no raplace
             lista_Aresta[j][1] = lista_Aresta[j][1].replace(')','')
+    for i in range(len(lista_Aresta)): # verifica se tem Nome de arestas repetidas(Chaves Repetidas)
+        if i + 1 < len(lista_Aresta):
+            if lista_Aresta[i][0] == lista_Aresta[i+1][0]:
+                return False
     for k in lista_Aresta:
         arestas_dict[k[0]] = k[1]
     return arestas_dict
@@ -24,16 +28,11 @@ def valida_Vertice(vertice):
         return True
 
 def grafo_Completo(Vertices, nome_arestas):
-    conj_vertNaoAdj = []
     for vert1 in Vertices:
         for vert2 in Vertices:
-            if (vert1 + '-' + vert2) not in nome_arestas and (vert2 + '-' + vert1) not in nome_arestas and vert1 != vert2 \
-                    and (vert1,vert2) not in conj_vertNaoAdj and (vert2,vert1) not in conj_vertNaoAdj:
-                conj_vertNaoAdj.append((vert1, vert2))
-    if len(conj_vertNaoAdj) == 0:
-        return True
-    else:
-        return False
+            if (vert1 + '-' + vert2) not in nome_arestas and (vert2 + '-' + vert1) not in nome_arestas and vert1 != vert2:
+                return False
+    return True
 
 def laco(vertice,conjuntoDict_Arestas): #verifica a existencia de laços
     chaves = conjuntoDict_Arestas.keys()
@@ -45,7 +44,8 @@ def laco(vertice,conjuntoDict_Arestas): #verifica a existencia de laços
 def exist_Aresta_Paralela(nome_arestas):
     for aresta1 in nome_arestas:
         for aresta2 in nome_arestas:
-            if aresta1 != aresta2 and aresta1 == aresta2[-1]+'-'+aresta2[0]:
+            i_traco = aresta2.index(SEPARADOR_ARESTA)
+            if aresta1 != aresta2 and aresta1 == aresta2[i_traco+1:]+'-'+aresta2[:i_traco]:
                 return True
     return False
 
@@ -68,20 +68,23 @@ def vert_NaoAdjacentes(Vertices, nome_arestas):
 def arestas_Sobre_Vertices(vertice,chaves):
     conj_arestas_Sobre_Vertices = []
     for chave in chaves:
-        if conjuntoDict_Arestas[chave][0] == vertice or conjuntoDict_Arestas[chave][-1] == vertice:
+        i_traco = conjuntoDict_Arestas[chave].index(SEPARADOR_ARESTA)
+        if conjuntoDict_Arestas[chave][:i_traco] == vertice or conjuntoDict_Arestas[chave][i_traco+1:] == vertice:
             conj_arestas_Sobre_Vertices.append(chave)
     return conj_arestas_Sobre_Vertices
 
 cont = 0
 parada = True
 Vertices = []
-grafo_Valido = []
+nome_arestas = []
+SEPARADOR_ARESTA = '-'
+lista_ciclos = []
 
 while parada == True:
     vert = input('Informe os vértices separados por vírgulas: ')
 
-    if vert.count('(') != 0 or vert.count(')') != 0:
-        print('Vértices invalidos. Informe vértices sem parênteses!')
+    if vert.count('(') != 0 or vert.count(')') != 0 or vert[-1].isspace() is True or vert[-1]==',':
+        print('Vértices invalidos. Informe vértices válidos!')
         continue
 
     Vertices = vert.split(', ')
@@ -100,10 +103,13 @@ while parada == False:
     arestas = input('Informe as arestas separados por vírgulas(Exemplo: a1(b-c),a2(c-d),...): ')
 
     conjuntoDict_Arestas = valida_Aresta(arestas)
+    if conjuntoDict_Arestas is False:
+        print('Existem nomes de arestas repetidas. Informe novamente as arestas.')
+        continue
     try:
         grafo_Valido = Grafo(Vertices, conjuntoDict_Arestas)
     except:
-        print("Arestas inválidas: Verifique se os vértice informados estão definidos. Informe as arestas novamente.")
+        print('Arestas inválidas: Verifique se os vértice informados estão definidos. Informe as arestas novamente.')
         continue
 
     chaves = conjuntoDict_Arestas.keys()
@@ -118,10 +124,27 @@ while parada == False:
     if cont == len(conjuntoDict_Arestas):
         parada = True
 
-nome_arestas = [] #conjunto das arestas
-chaves = conjuntoDict_Arestas.keys() #conjunto das chaves
-
 for chave in chaves:
     nome_arestas.append(conjuntoDict_Arestas[chave])
 
-print(grafo_Completo(Vertices,nome_arestas))
+'''def ciclos(Vertices , nome_arestas , lista , k = 0,j = 0, cont = 0):
+    i_traco = nome_arestas[j].index(SEPARADOR_ARESTA)
+    print(nome_arestas[j][:i_traco])
+    print(Vertices[k])
+    if cont == len(Vertices):
+        return lista
+    if Vertices[k] == nome_arestas[j][:i_traco]:
+        lista.append(nome_arestas[j])
+        for i in range(len(Vertices)):
+            k += i
+            if Vertices[i] == nome_arestas[j][i_traco+1:]:
+                break
+        del(nome_arestas[j])
+        ciclos(Vertices,nome_arestas,lista,j + 1, k)
+    else:
+        ciclos(Vertices[k], nome_arestas, lista, j + 1, k)'''
+
+def ciclos():
+    
+ciclos(Vertices,nome_arestas,lista_ciclos)
+print(lista_ciclos)
