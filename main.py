@@ -78,7 +78,6 @@ parada = True
 Vertices = []
 nome_arestas = []
 SEPARADOR_ARESTA = '-'
-lista_ciclos = []
 
 while parada == True:
     vert = input('Informe os vértices separados por vírgulas: ')
@@ -127,24 +126,52 @@ while parada == False:
 for chave in chaves:
     nome_arestas.append(conjuntoDict_Arestas[chave])
 
-'''def ciclos(Vertices , nome_arestas , lista , k = 0,j = 0, cont = 0):
-    i_traco = nome_arestas[j].index(SEPARADOR_ARESTA)
-    print(nome_arestas[j][:i_traco])
-    print(Vertices[k])
-    if cont == len(Vertices):
-        return lista
-    if Vertices[k] == nome_arestas[j][:i_traco]:
-        lista.append(nome_arestas[j])
-        for i in range(len(Vertices)):
-            k += i
-            if Vertices[i] == nome_arestas[j][i_traco+1:]:
-                break
-        del(nome_arestas[j])
-        ciclos(Vertices,nome_arestas,lista,j + 1, k)
-    else:
-        ciclos(Vertices[k], nome_arestas, lista, j + 1, k)'''
+def __Aux1_ciclo(vertice,arestas): #retorna o ultimo vertice EX: AS-DF essa função retorna DF.
+    for i in arestas:
+        i_traco = i.index(SEPARADOR_ARESTA)
+        if vertice not in i: # evita esse caso f(a-d),g(s-a),h(a-s)
+            continue
 
-def ciclos():
-    
-ciclos(Vertices,nome_arestas,lista_ciclos)
-print(lista_ciclos)
+        if vertice == i[:i_traco]:
+            return i[i_traco+1:]
+
+def ciclo(Vertice,nome_arestas,lista=[], cont = 0):  #Cria um ciclo
+    lista.append(Vertice)
+    proximo_vertice = __Aux1_ciclo(Vertice, nome_arestas)
+    while True:
+        cont += 1
+        if cont == len(Vertices):
+            break
+        lista.append(proximo_vertice)
+        if lista[0] == lista[-1]:
+            return lista
+        proximo_vertice = __Aux1_ciclo(proximo_vertice, nome_arestas)
+    return lista
+
+print(ciclo('a',nome_arestas, lista = []))
+print(ciclo('d',nome_arestas, lista=[]))
+
+'''def ciclos(Vertices, nome_arestas, conjunto_Ciclos = [], cont = 0):
+    adiciona = True
+    for vertice in Vertices:
+        ciclo = __Aux1_ciclo(vertice,nome_arestas,lista=[])
+        if len(conjunto_Ciclos) != 0:
+            for i in conjunto_Ciclos:
+                for j in range(len(ciclo)):
+                    print(ciclo[j])
+                    print(i)
+                    if ciclo[j] in i:
+                        cont += 1
+                    if cont == len(i):
+                        adiciona = False
+
+        if ciclo[0] == ciclo[-1] and adiciona:
+            conjunto_Ciclos.append(ciclo)
+    return conjunto_Ciclos
+
+
+
+print(ciclos(Vertices,nome_arestas))'''
+
+# a, s, d, f, g
+# q(a-s),w(s-d),e(d-a),r(d-f),t(f-g),y(g-d) para o a
