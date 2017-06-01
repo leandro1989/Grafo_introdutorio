@@ -2,7 +2,7 @@ from grafo import *
 
 def valida_Aresta(arestas):
     lista_Aresta = []
-    lista_aux1 = arestas.split(',')
+    lista_aux1 = arestas.split(', ')
     arestas_dict = {}
     for i in lista_aux1:
         lista_Aresta.append(i.split('('))
@@ -140,7 +140,7 @@ def ciclo(Vertice,nome_arestas,lista=[], cont = 0):  #Cria um ciclo
     proximo_vertice = __Aux1_ciclo(Vertice, nome_arestas)
     while True:
         cont += 1
-        if cont == len(Vertices):
+        if cont == len(Vertices) +1:
             break
         lista.append(proximo_vertice)
         if lista[0] == lista[-1]:
@@ -148,18 +148,15 @@ def ciclo(Vertice,nome_arestas,lista=[], cont = 0):  #Cria um ciclo
         proximo_vertice = __Aux1_ciclo(proximo_vertice, nome_arestas)
     return lista
 
-print(ciclo('a',nome_arestas, lista = []))
-print(ciclo('d',nome_arestas, lista=[]))
+print(ciclo('a',nome_arestas, lista=[]))
 
 '''def ciclos(Vertices, nome_arestas, conjunto_Ciclos = [], cont = 0):
     adiciona = True
     for vertice in Vertices:
-        ciclo = __Aux1_ciclo(vertice,nome_arestas,lista=[])
+        ciclo = __Aux1_ciclo(vertice,nome_arestas)
         if len(conjunto_Ciclos) != 0:
             for i in conjunto_Ciclos:
                 for j in range(len(ciclo)):
-                    print(ciclo[j])
-                    print(i)
                     if ciclo[j] in i:
                         cont += 1
                     if cont == len(i):
@@ -167,11 +164,11 @@ print(ciclo('d',nome_arestas, lista=[]))
 
         if ciclo[0] == ciclo[-1] and adiciona:
             conjunto_Ciclos.append(ciclo)
-    return conjunto_Ciclos
+    return conjunto_Ciclos'''
 
+grafo_Valido.print_matriz()
 
-
-print(ciclos(Vertices,nome_arestas))'''
+#print(ciclos(Vertices,nome_arestas))
 
 # a, s, d, f, g
 # q(a-s),w(s-d),e(d-a),r(d-f),t(f-g),y(g-d) para o a

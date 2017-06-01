@@ -24,12 +24,37 @@ class Grafo:
                 raise VerticeInvalidoException('O vértice ' + v + ' é inválido')
 
         self.N = N
+        self.representa_Aresta = [['-']*len(N)]*len(N)
 
         for a in A:
             if not(self.arestaValida(A[a])):
+
                 raise ArestaInvalidaException('A aresta ' + A[a] + ' é inválida')
 
         self.A = A
+        self.representa_Aresta = self._conversaoAresta(self.representa_Aresta, self.A, self.N)
+
+    def _conversaoAresta(self, matriz, A, N):
+        Existe_laco = 1
+        for i in A:
+            i_traco = A[i].index('-')
+            a = N.index(A[i][:i_traco])
+            b = N.index(A[i][i_traco + 1:])
+            matriz[a][b] = Existe_laco
+
+        for k in range(len(N)):
+            for j in range(len(N)):
+                if (k <= j) and matriz[k][j] != Existe_laco:
+                    matriz[k][j] = 0
+                if k > j:
+                    matriz[k][j] = '-'
+
+        return matriz
+
+
+    def print_matriz(self):
+        for i in self.representa_Aresta:
+            print(i)
 
     def arestaValida(self, aresta=''):
         '''
@@ -123,3 +148,4 @@ class Grafo:
                 grafo_str += ", "
 
         return grafo_str
+
